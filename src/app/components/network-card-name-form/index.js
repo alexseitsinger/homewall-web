@@ -17,12 +17,16 @@ export default function NetworkCardNameForm(props) {
     setValue(e.target.value)
   }
 
+  const placeholder = props.placeholder 
+    ? props.placeholder
+    : "New name"
+
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
         <Form.Control
           type="text"
-          placeholder="New card name" 
+          placeholder={placeholder}
           value={value}
           onChange={handleChange}
         />

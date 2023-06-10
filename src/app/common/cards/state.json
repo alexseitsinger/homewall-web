@@ -1,0 +1,18 @@
+[
+  {
+    "name": "ext0",
+    "originalName": "",
+    "address": "192.168.1.254/24",
+    "protocol": 4,
+    "groups": ["egress"],
+    "status": "UP"
+  },
+  {
+    "name": "int0",
+    "originalName": "",
+    "address": "192.168.1.253/24",
+    "protocol": 4,
+    "groups": ["ingress"],
+    "status": "UP"
+  }
+]

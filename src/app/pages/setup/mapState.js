@@ -1,3 +1,4 @@
 export default (state, ownProps) => ({
-  isAuthenticated: state.authentication.isAuthenticated,
+  isAuthenticated: state.common.authentication.isAuthenticated,
+  cards: state.common.cards,
 });
