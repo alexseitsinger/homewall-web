@@ -151,6 +151,7 @@ export default {
       app: path.join(PROJECT_DIR, 'src/app'),
     },
   },
+  /*
   optimization: {
     concatenateModules: true,
     mangleExports: true,
@@ -191,6 +192,7 @@ export default {
       },
     },
   },
+  */
   //experiments: {
     //topLevelAwait: true,
   //},
