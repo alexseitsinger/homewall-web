@@ -1,6 +1,6 @@
 import { bindActionCreators } from "redux";
 
-import { setAddress, setName, addGroup } from "./actions"
+import { setAddress, setName, addGroup } from "app/common/cards/actions"
 
 export default (dispatch, ownProps) => ({
   setAddress: (name, address) => dispatch(setAddress(name, address)),
