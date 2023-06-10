@@ -27,12 +27,15 @@ const store = configureStore(history, initialState)
 const root = createRoot(document.getElementById('root'))
 //const root = hydrateRoot(document.getElementById('root'))
 
+// Required if router isn't located at the top of rootReducer.
+const routerSelector = state => state.common.router
+
 const renderApp = () => {
   const composedApp = (
     <SSRProvider>
       <HelmetProvider>
         <Provider store={store}>
-          <ReduxRouter history={history}>
+          <ReduxRouter history={history} routerSelector={routerSelector}>
             <App />
           </ReduxRouter>
         </Provider>
@@ -53,9 +56,11 @@ if (document.readyState === "loading") {
 }
 
 /*
-if (process.env.NODE_ENV !== 'production' && module.hot) {
-  module.hot.accept('./app', () => {
-    renderApp()
-  })
+if (process.env.NODE_ENV !== 'production') {
+  if (typeof module !== 'undefined' && module.hot) {
+    module.hot.accept('./app/index', () => {
+      console.log('Hot-reloaded ./app/index');
+    })
+  }
 }
 */
