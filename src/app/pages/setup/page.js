@@ -6,8 +6,14 @@ import Col from "react-bootstrap/Col"
 import Form from "react-bootstrap/Form"
 import Card from "react-bootstrap/Card"
 import Button from "react-bootstrap/Button"
+import Stack from "react-bootstrap/Stack"
+import axios from "axios"
 
 import NetworkCardNameForm from "app/components/network-card-name-form"
+
+async function setCardRename(originalName, name) {
+  await axios.post('/run', {command: `/usr/sbin/sysrc ifconfig_${originalName}_name="${name}"`})
+}
 
 export default function SetupPage(props) {
   const extCard = props.cards.filter(c => c.name === 'ext0')[0]
@@ -21,34 +27,39 @@ export default function SetupPage(props) {
         <meta name="description" content="setup-page-description" />
       </Helmet>
       <Container>
-        <p>Enter the original names of the following network cards.</p>
-        <Row>
-          <Col xsm>
-            WAN-facing network card
-            <NetworkCardNameForm
-              placeholder={extCard !== 'undefined' ? extCard.originalName : "external card name"}
-              onSubmit={(originalName) => {
-                if (originalName !== "") {
-                  props.setOriginalCardName("ext0", originalName);
-                }
-              }}
-            />
-          </Col>
-          <Col xsm>
-            LAN-facing network card
-            <NetworkCardNameForm
-              placeholder={intCard !== 'undefined' ? intCard.originalName : "Internal card name"}
-              onSubmit={(originalName) => {
-                if (originalName !== "") {
-                  props.setOriginalCardName("int0", originalName);
-                }
-              }}
-            />
-          </Col>
-          <Col xsm>
-            -
-          </Col>
-        </Row>
+        <p>Enter the original names of the following network cards. During boot, each card will be renamed to ext0 and int0 respectively.</p>
+        <Stack direction="horizontal" gap={2}>
+          <Card>
+            <Card.Body>
+              <Card.Title>ext0: WAN-facing</Card.Title>
+              <Card.Text>
+                <NetworkCardNameForm
+                  onSubmit={(originalName) => {
+                    if (originalName !== "") {
+                      props.setOriginalCardName("ext0", originalName);
+                      setCardRename(originalName, "ext0");
+                    }
+                  }}
+                />
+              </Card.Text>
+            </Card.Body>
+          </Card>
+          <Card>
+            <Card.Body>
+              <Card.Title>int0: LAN-facing</Card.Title>
+              <Card.Text>
+                <NetworkCardNameForm
+                  onSubmit={(originalName) => {
+                    if (originalName !== "") {
+                      props.setOriginalCardName("int0", originalName);
+                      setCardRename(originalName, "int0");
+                    }
+                  }}
+                />
+              </Card.Text>
+            </Card.Body>
+          </Card>
+        </Stack>
       </Container>
     </React.Fragment>
   )
