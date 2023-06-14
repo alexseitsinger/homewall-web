@@ -27,3 +27,10 @@ export const setStatus = (name, nextStatus) => ({
   name,
   nextStatus,
 })
+
+const getCard = async (cardName) => {
+  return (await axios.post('http://127.0.0.1/run', {
+    headers: { 'Content-Type': 'application/json' },
+    data: { 'command': `/sbin/ifconfig ${cardName}` },
+  }))
+}
