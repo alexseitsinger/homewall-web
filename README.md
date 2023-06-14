@@ -2,7 +2,8 @@
 
 ### Requirements
 
-- nginx
+- FreeBSD jail (e.g. bastille)
+- pkg install nginx
 
 ### Procedures 
 
