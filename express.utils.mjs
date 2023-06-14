@@ -44,18 +44,40 @@ function normalizeAssets(assets) {
   //return name.split('-').join(' ')
 //}
 
+/*
+ * To test status (200 or 500):
+ * run.test.sh <cmd> | jq '.status' 
+ */
+async function getCard(command) {
+  const { stdout, stderr } = await exec(command);
+  const lines = stdout.split('\n');
+
+  const name = lines[0].match(/^.+:/)[0].split(':')[0];
+  //const inet = lines[4].match(/inet (\.?\d{1,3}){4}/)[0];
+  //const groups = lines[5].match(/groups\: (.+)$/)[1].split(' ');
+  //const status = false;
+  //if (/\<UP,/.test(lines[0])) {
+    //status = true;
+  //}
+
+  return { name }
+  //return { name, inet, status, groups }
+}
+
 async function runResponse(req, res, next) {
   const command = req.body.command;
+  let lines = [];
 
   try {
     console.log(`Running the command: ${command}`)
-    const { stdout, stderr } = await exec(command);
-    const lines = stdout.split('\n')
-    return res.json({ command, lines })
+    const { stdout, stderr } = await exec(command)
+    lines = stdout.split('\n')
+    return res.json({ command, lines, status: 200 })
   }
   catch (error) {
     console.error(`Running command failed: ${command}`)
-    return res.sendStatus(500)
+    lines = [error.name, error.message]
+    return res.json({ command, lines, status: 500 })
   }
 }
 
