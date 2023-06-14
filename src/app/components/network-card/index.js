@@ -9,50 +9,58 @@ import NetworkCardNameForm from "app/components/network-card-name-form"
 
 export default function NetworkCard({ data, setAddress, setName }) {
   const [isAddressBeingEdited, setAddressBeingEdited] = useState(false)
-
   const address = isAddressBeingEdited
-    ? <React.Fragment>
-      <IPForm
+    ? <IPForm
         onSubmit={(nextAddress) => {
           if (nextAddress !== "") {
             setAddress(data.name, nextAddress)
           }
           setAddressBeingEdited(false)
         }}
+        onCancel={() => {
+          setAddressBeingEdited(false)
+        }}
       />
-      <Button variant="link" onClick={null}><CheckCircleFill /></Button>
-      <Button variant="link" onClick={() => setAddressBeingEdited(false)}><XCircleFill /></Button>
-      </React.Fragment>
-    : <React.Fragment>
-      <em>{data.address}</em>
-      <Button variant="link" onClick={() => setAddressBeingEdited(true)}><PencilFill /></Button>
-      </React.Fragment>
+    : <div className="d-flex align-items-center">
+        <em>{data.address}</em>
+        <Button 
+          variant="link" 
+          className="p-0 ms-2"
+          onClick={() => setAddressBeingEdited(true)}>
+          <PencilFill style={{ color: "gray" }} /> 
+        </Button>
+      </div>
 
   const [isNameBeingEdited, setNameBeingEdited] = useState(false)
   const nameCol = isNameBeingEdited 
-    ? <React.Fragment>
-      <NetworkCardNameForm
+    ? <NetworkCardNameForm
+        currentName={data.name}
         onSubmit={(nextName) => {
           if (nextName !== "") {
             setName(data.name, nextName)
           }
           setNameBeingEdited(false)
         }}
+        onCancel={() => {
+          setNameBeingEdited(false)
+        }}
       />
-      <Button variant="link" onClick={null}><CheckCircleFill /></Button>
-      <Button variant="link" onClick={() => setNameBeingEdited(false)}><XCircleFill /></Button>
-      </React.Fragment>
-    : <React.Fragment>
-      {data.name}
-      <Button variant="link"><PencilFill onClick={() => setNameBeingEdited(true)} /></Button>
-      </React.Fragment>
+    : <div className="d-flex align-items-center">
+        <span>{data.name}</span>
+        <Button 
+          variant="link"
+          className="p-0 ms-2"
+          onClick={() => setNameBeingEdited(true)}>
+          <PencilFill style={{ color: "gray" }} />
+        </Button>
+      </div>
 
   return (
     <tr>
-      <td className="align-middle">{nameCol}</td>
-      <td className="align-middle">{address}</td>
-      <td className="align-middle">{data.groups}</td>
-      <td className="align-middle">{data.status}</td>
+      <td className="p-2 align-middle">{nameCol}</td>
+      <td className="p-2 align-middle">{address}</td>
+      <td className="p-2 align-middle">{data.groups}</td>
+      <td className="p-2 align-middle">{data.status}</td>
     </tr>
   )
 }
