@@ -7,7 +7,9 @@ import NetworkCard from "src/app/components/network-card"
 
 export default function NetworkCardsPage(props) {
   const cards = props.cards.map(c => (
-    <NetworkCard key={c.name} data={c} 
+    <NetworkCard 
+      key={c.name} 
+      data={c} 
       setAddress={props.setAddress} 
       setName={props.setName}
       addGroup={props.addGroup}
@@ -27,7 +29,7 @@ export default function NetworkCardsPage(props) {
           <thead>
             <tr>
               <th>Name</th>
-              <th>Address</th>
+              <th>IP Address</th>
               <th>Groups</th>
               <th>Status</th>
             </tr>
