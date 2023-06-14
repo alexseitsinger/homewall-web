@@ -16,33 +16,32 @@ export default function Layout(props) {
     <Nav>
       <Nav.Item>
         <LinkContainer to="/setup">
-          <Nav.Link>Setup</Nav.Link>
+          <Nav.Link><span style={{ color: "white" }}>Setup</span></Nav.Link>
         </LinkContainer>
       </Nav.Item>
       <Nav.Item>
-        <LinkContainer to="/network-cards">
-          <Nav.Link>Network Cards</Nav.Link>
+        <LinkContainer to="/cards">
+          <Nav.Link><span style={{ color: "white" }}>Cards</span></Nav.Link>
         </LinkContainer>
       </Nav.Item>
-      <NavDropdown title="Firewall" id="nav-dropdown">
-        <LinkContainer to="/firewall/status">
-          <NavDropdown.Item>Status</NavDropdown.Item>
+      <Nav.Item>
+        <LinkContainer to="/rules">
+          <Nav.Link><span style={{ color: "white" }}>Rules</span></Nav.Link>
         </LinkContainer>
-        <LinkContainer to="/firewall/rules">
-          <NavDropdown.Item>Rules</NavDropdown.Item>
-        </LinkContainer>
-      </NavDropdown>
+      </Nav.Item>
     </Nav>
   )
   const navAnonymous = <div>anonymous</div>
 
   return (
     <React.Fragment>
-      <Navbar bg="light" expand="lg">
+      <div style={{ height: "58px" }}></div>
+      <Navbar bg="dark" expand="lg" fixed="top">
         <Container>
           <LinkContainer to="/">
-            <Navbar.Brand>HomeWall</Navbar.Brand>
+            <Navbar.Brand><span style={{ color: "white" }}>HomeWall</span></Navbar.Brand>
           </LinkContainer>
+          <div className="vr" style={{ minHeight: "100%", color: "white", marginLeft: "0.5em", marginRight: "0.5em" }}></div>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav" justify-content="justify-content-end">
             <Nav className="me-auto">
