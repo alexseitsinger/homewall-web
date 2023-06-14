@@ -1,0 +1,15 @@
+# Homewall Web
+
+### Requirements
+
+- nginx
+
+### Procedures 
+
+**Start the development server**
+1. npm run start:dev
+
+**Create bundle for homewall release**
+1. npm run build:client
+2. npm run build:express
+3. /bin/sh dist.sh
