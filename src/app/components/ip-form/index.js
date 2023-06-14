@@ -17,19 +17,32 @@ export default function IPForm(props) {
     setValue(e.target.value)
   }
 
+  const handleCancel = (e) => {
+    if (typeof props.onCancel === 'function') {
+      props.onCancel();
+    }
+  }
+
   return (
     <Form onSubmit={handleSubmit}>
-      <Form.Group className="mb-3">
-        <Form.Control
-          type="text"
-          placeholder="New IP address" 
-          value={value}
-          onChange={handleChange}
-        />
-      </Form.Group>
-      <Button type="submit" variant="primary">
-        Submit
-      </Button>
+      <div className="d-flex">
+        <div className="p-2 flex-grow-1">
+          <Form.Control
+            type="text"
+            placeholder="New IP address" 
+            value={value}
+            onChange={handleChange}
+          />
+        </div>
+        <div className="p-2">
+          <Button type="submit" variant="primary">
+            Save 
+          </Button>
+          <Button onClick={handleCancel} className="ms-2">
+            Cancel
+          </Button>
+        </div>
+      </div>
     </Form>
   )
 }
