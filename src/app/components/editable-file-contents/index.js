@@ -5,18 +5,25 @@ import axios from "axios"
 
 import FileContents from "app/components/file-contents"
 
+async function writeRules(path, lines) {
+  await axios.post('/write', {path, lines})
+}
+
+async function reloadRules() {
+  await axios.post('/run', {command: '/sbin/pfctl -F all -f /etc/pf.conf'})
+}
+
 export default function EditableFileContents(props) {
   const [isFetched, setFetched] = useState(false)
   const [lines, setLines] = useState([])
 
   // Save the file to props.path.
-  const handleSubmit = useCallback(async (e) => {
+  const handleSubmit = useCallback((e) => {
     e.preventDefault()
-
-    const resp = await axios.post('/write', {
-      path: props.path,
-      lines,
-    });
+    writeRules(props.path, lines)
+      .then(async () => {
+        await reloadRules()
+      })
   }, [lines, props.path])
 
   const handleChange = useCallback((e) => {
@@ -38,10 +45,16 @@ export default function EditableFileContents(props) {
     }
   }, [axios, props.path])
 
+  const handleCancel = useCallback((e) => {
+    if (typeof props.onCancel === 'function') {
+      props.onCancel();
+    }
+  }, [props.onCancel])
+
   return (
     <Form onSubmit={handleSubmit}>
       <Form.Group className="mb-3">
-        <Form.Label>{props.path}</Form.Label>
+        { props.isPathVisible ? <Form.Label>{props.path}</Form.Label> : null }
         <Form.Control 
           as="textarea" 
           rows={lines.length} 
@@ -49,9 +62,14 @@ export default function EditableFileContents(props) {
           value={lines.join('\r\n')}
         />
       </Form.Group>
-      <Button variant="primary" type="submit">
-        Submit
-      </Button>
+      <div className="float-end">
+        <Button variant="primary" type="submit"> 
+          Save 
+        </Button>
+        <Button onClick={null} onClick={handleCancel} className="ms-2">
+          Cancel
+        </Button>
+      </div>
     </Form>
   )
 }
