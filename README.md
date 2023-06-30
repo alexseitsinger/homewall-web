@@ -20,7 +20,7 @@ ssh dev0 firefox --no-remote http://127.0.0.1
 **Distribute**
 1. Create new client bundle.
 ```bash
-pnpm run build:client
+npm run build:client
 ```
 2. Create new server bundle.
 ```bash
