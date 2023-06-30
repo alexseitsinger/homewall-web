@@ -11,6 +11,10 @@ builtin . /etc/shrc
 
 _main() {
   local HERE=$( /usr/bin/dirname $( /bin/realpath "$0" ));
+  if [ ! -d "$HERE" ]; then
+    errmsg "script must be executed, not sourced or evaluated."; return 1;
+  fi
+
   local NAME=$( /usr/bin/basename "$HERE" );
 
   # Delete any old build directory before replacing it.
@@ -49,23 +53,34 @@ _main() {
     notdir "$WEB_DIR"; return 1
   fi
 
-  # Create (new) /usr/local/www/homewall/www/build/
   local DST_BUILD_DIR="${WEB_DIR}/build"
-  echo "Creating ${DST_BUILD_DIR}" >> /dev/stderr
-  /bin/mkdir -p "$DST_BUILD_DIR" || return 1
+  if [ ! -d "$DST_BUILD_DIR" ]; then
+    # Create (new) /usr/local/www/homewall/www/build/
+    #echo "Creating: ${DST_BUILD_DIR}" >> /dev/stderr
+    #/bin/mkdir -p "$DST_BUILD_DIR" || return 1
+    notdir "$DST_BUILD_DIR"; return 1;
+  fi
+
+  echo "Deleting old: ${DST_BUILD_DIR}" >> /dev/stderr;
+  #/bin/rm -rf "$DST_BUILD_DIR" || return 1
+  /usr/bin/find "$DST_BUILD_DIR" -type f -maxdepth 1 -delete || return 1
 
   # Copy /work/systems/targets/homewall-web/build/* into 
   #   /work/systems/targets/homewall/mnt/usr/local/www/homewall/build/.
   local SRC_BUILD_DIR="${HERE}/build"
-  echo "Copying ${SRC_BUILD_DIR} into ${DST_BUILD_DIR}" >> /dev/stderr
-  cphier "$SRC_BUILD_DIR" "$DST_BUILD_DIR" || return 1
+  if [ ! -d "$SRC_BUILD_DIR" ]; then
+    notdir "$SRC_BUILD_DIR"; return 1;
+  fi
+  echo "Copying: ${SRC_BUILD_DIR} into ${DST_BUILD_DIR}" >> /dev/stderr
+  ( /usr/bin/tar -cf - -C ${SRC_BUILD_DIR} . | /usr/bin/tar -xf - -C ${DST_BUILD_DIR} )
+  #cphier "$SRC_BUILD_DIR" "$DST_BUILD_DIR" || return 1
 
   # Move /usr/local/www/homewall/build/express.cjs,index.html to
   #   /usr/local/www/homewall/.
-  echo "Moving express.cjs from ${SRC_BUILD_DIR} to ${WEB_DIR}" >> /dev/stderr
+  echo "Moving: express.cjs from ${SRC_BUILD_DIR} to ${WEB_DIR}" >> /dev/stderr
   /bin/mv "${DST_BUILD_DIR}/express.cjs" "$WEB_DIR" || return 1
 
-  echo "Moving index.html from ${SRC_BUILD_DIR} to ${WEB_DIR}" >> /dev/stderr
+  echo "Moving: index.html from ${SRC_BUILD_DIR} to ${WEB_DIR}" >> /dev/stderr
   /bin/mv "${DST_BUILD_DIR}/index.html" "$WEB_DIR" || return 1
 }
 _main;
