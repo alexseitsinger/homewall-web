@@ -7,13 +7,26 @@
 
 ## Procedures 
 
-**Start the development server**
-1. npm run start:dev
-2a. Visit http://192.168.1.254 from host browser
-2b. Visit http://192.168.1.254 from dev0 jail browser
-2c. Visit http://127.0.0.1 from dev0 jail browser
+**Development**
+1. Start the development server.
+```bash
+npm run start:dev
+```
+2. Open the website in a browser.
+```bash
+ssh dev0 firefox --no-remote http://127.0.0.1
+```
 
-**Create bundle for homewall release**
-1. npm run build:client
-2. npm run build:express
-3. ./dist.sh
+**Distribute**
+1. Create new client bundle.
+```bash
+pnpm run build:client
+```
+2. Create new server bundle.
+```bash
+npm run build:express
+```
+3. Copy the built files into the homewall installation.
+```bash
+./dist.sh
+```
